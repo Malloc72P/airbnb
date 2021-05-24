@@ -2,11 +2,14 @@ import styled from 'styled-components';
 import React, { useRef, ReactElement } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { ReservationBarBtnType, T_CheckInOut, T_CheckInOutString } from './atoms';
-import { SelectedBtn, DropPopupContent, LocationSearchState, CheckInOutString } from './atoms';
+import { ReservationBarBtnType, T_CheckInOut, T_CheckInOutString, T_PriceRange } from './atoms';
+import { SelectedBtn,  LocationSearchState, CheckInOutString, PriceRange } from './atoms';
 
 import ReservationBarBtn from './ReservationBarBtn';
 import ReservationBarDropPopup from './ReservationBarDropPopup';
+import LocationSearch from './LocationSearch/LocationSearch';
+import CalendarSlider from './CalendarSlider/CalendarSlider';
+import PricePlotSlider from './PricePlotSlider/PricePlotSlider';
 
 type ReservationBarProps = {
   className?: string,
@@ -15,9 +18,10 @@ type ReservationBarProps = {
 function ReservationBar({ className }: ReservationBarProps): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
   const [selectedBtn, setSelectedBtn] = useRecoilState<ReservationBarBtnType|null>(SelectedBtn);
-  const dropPopupContent = useRecoilValue<ReactElement|null>(DropPopupContent);
+  // const dropPopupContent = useRecoilValue<ReactElement|null>(DropPopupContent);
   const [location, setLocation] = useRecoilState<string>(LocationSearchState);
   const checkInOutString = useRecoilValue<T_CheckInOutString>(CheckInOutString);
+  const priceRange = useRecoilValue<T_PriceRange>(PriceRange);
 
   const handleClickCaptureBtn = (currentTarget: HTMLDivElement): void => {
     setSelectedBtn((oldSelectedBtn: ReservationBarBtnType|null): ReservationBarBtnType|null => {
@@ -34,6 +38,39 @@ function ReservationBar({ className }: ReservationBarProps): ReactElement {
     setLocation(target.value);
   }
 
+  const renderDropPopup = (): ReactElement => {
+    switch (selectedBtn) {
+      case ReservationBarBtnType.Location:
+        return (
+          <ReservationBarDropPopup outsideBlacklist={[ref.current as HTMLElement]}>
+            <LocationSearch/>
+          </ReservationBarDropPopup>
+        );
+
+      case ReservationBarBtnType.CheckIn:
+      case ReservationBarBtnType.CheckOut:
+        return (
+          <ReservationBarDropPopup outsideBlacklist={[ref.current as HTMLElement]}
+            width='100%'>
+            <CalendarSlider/>
+          </ReservationBarDropPopup>
+        );
+
+      case ReservationBarBtnType.PriceRange:
+        return (
+          <ReservationBarDropPopup outsideBlacklist={[ref.current as HTMLElement]}
+            right='0'>
+            <PricePlotSlider/>
+          </ReservationBarDropPopup>
+        );
+      
+      // TODO: Personnel
+
+      default:
+        throw new Error(`Not existing index ${selectedBtn}`);
+    }
+  }
+
   return (
     <StyledReservationBar className={className} ref={ref}>
       <ReservationBarBtn dataBtnType={ReservationBarBtnType.Location} onClickCapture={handleClickCaptureBtn}>
@@ -44,11 +81,13 @@ function ReservationBar({ className }: ReservationBarProps): ReactElement {
         <div className='title'>체크인</div>
         <div className={`content ${checkInOutString.in !== null ? 'entered' : ''}`}>{checkInOutString.in ?? '날짜 입력'}</div>
       </ReservationBarBtn>        
-      <ReservationBarBtn dataBtnType={ReservationBarBtnType.CheckOut} onClickCapture={handleClickCaptureBtn}>
+      <ReservationBarBtn
+        dataBtnType={ReservationBarBtnType.CheckOut}
+        onClickCapture={handleClickCaptureBtn}>
         <div className='title'>체크아웃</div>
         <div className={`content ${checkInOutString.out !== null ? 'entered' : ''}`}>{checkInOutString.out ?? '날짜 입력'}</div>
       </ReservationBarBtn>
-      <ReservationBarBtn /* TODO: dataBtnType={} */onClickCapture={handleClickCaptureBtn}>
+      <ReservationBarBtn dataBtnType={ReservationBarBtnType.PriceRange} onClickCapture={handleClickCaptureBtn}>
         <div className='title'>요금</div>
         <div className='content'>tmp</div>
       </ReservationBarBtn>
@@ -58,7 +97,7 @@ function ReservationBar({ className }: ReservationBarProps): ReactElement {
         <button className='search-btn'>
         </button>
       </ReservationBarBtn>
-      {dropPopupContent && <ReservationBarDropPopup outsideBlacklist={[ref.current as HTMLElement]}>{dropPopupContent}</ReservationBarDropPopup>}
+      {selectedBtn && renderDropPopup()}
     </StyledReservationBar>
   )
 };

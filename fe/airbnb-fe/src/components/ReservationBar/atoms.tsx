@@ -3,11 +3,13 @@ import { ReactElement } from 'react';
 
 import LocationSearch from './LocationSearch/LocationSearch';
 import CalendarSlider from './CalendarSlider/CalendarSlider';
+import PricePlotSlider from './PricePlotSlider/PricePlotSlider';
 
 export enum ReservationBarBtnType {
   Location = 'location',
   CheckIn = 'check-in',
   CheckOut = 'check-out',
+  PriceRange = 'price-range'
 };
 
 export const SelectedBtn = atom<ReservationBarBtnType|null>({
@@ -31,6 +33,8 @@ export const DropPopupContent = selector<ReactElement|null>({
       case ReservationBarBtnType.CheckOut:
         return <CalendarSlider/>;
 
+      case ReservationBarBtnType.PriceRange:
+        return <PricePlotSlider/>
       // TODO: PriceRange, Personnel
 
       default:
@@ -74,5 +78,18 @@ export const CheckInOutString = selector<T_CheckInOutString>({
       out: checkOutDate === null ? null : `${checkOutDate.getMonth() + 1}월 ${checkOutDate.getDate()}일`
     }
   },
+});
+
+export type T_PriceRange = {
+  from: number|null,
+  to: number|null
+};
+
+export const PriceRange = atom<T_PriceRange>({
+  key: 'PriceRange',
+  default: {
+    from: null,
+    to: null
+  }
 });
 

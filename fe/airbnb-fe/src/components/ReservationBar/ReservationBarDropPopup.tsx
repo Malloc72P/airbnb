@@ -6,11 +6,14 @@ import { ReservationBarBtnType } from './atoms';
 import { SelectedBtn } from './atoms';
 
 type ReservationBarDropPopupProps = {
+  width?: string,
+  left?: string,
+  right?: string,
   outsideBlacklist?: HTMLElement[],
   children: ReactElement
 };
 
-function ReservationBarDropPopup({ outsideBlacklist = [], children }: ReservationBarDropPopupProps): ReactElement {
+function ReservationBarDropPopup({ width, left, right, outsideBlacklist = [], children }: ReservationBarDropPopupProps): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
   const setSelectedBtn = useSetRecoilState<ReservationBarBtnType|null>(SelectedBtn);
 
@@ -32,7 +35,7 @@ function ReservationBarDropPopup({ outsideBlacklist = [], children }: Reservatio
   };
 
   return (
-    <StyledReservationBarDropPopup ref={ref}>
+    <StyledReservationBarDropPopup ref={ref} width={width} left={left} right={right}>
       {children}
     </StyledReservationBarDropPopup>
   );
@@ -40,8 +43,14 @@ function ReservationBarDropPopup({ outsideBlacklist = [], children }: Reservatio
 
 export default ReservationBarDropPopup;
 
-const StyledReservationBarDropPopup = styled.div`
-  width: 100%;
+type StyledReservationBarDropPopupProps = {
+  width?: string,
+  left?: string,
+  right?: string
+};
+
+const StyledReservationBarDropPopup = styled.div<StyledReservationBarDropPopupProps>`
+  width: ${props => props.width ?? 'auto'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,7 +58,8 @@ const StyledReservationBarDropPopup = styled.div`
   padding: 2.5rem;
   position: absolute;
   top: 6rem;
-  left: 0;
+  ${props => props.left ? `left: ${props.left}` : ''};
+  ${props => props.right ? `right: ${props.right}` : ''};
   background-color: #ffffff;
   border-radius: 3rem;
 `;
