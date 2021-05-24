@@ -1,9 +1,4 @@
 import { atom, selector } from 'recoil';
-import { ReactElement } from 'react';
-
-import LocationSearch from './LocationSearch/LocationSearch';
-import CalendarSlider from './CalendarSlider/CalendarSlider';
-import PricePlotSlider from './PricePlotSlider/PricePlotSlider';
 
 export enum ReservationBarBtnType {
   Location = 'location',
@@ -15,32 +10,6 @@ export enum ReservationBarBtnType {
 export const SelectedBtn = atom<ReservationBarBtnType|null>({
   key: 'SelectedBtn',
   default: null
-});
-
-export const DropPopupContent = selector<ReactElement|null>({
-  key: 'DropPopupContent',
-  get: ({ get }): (ReactElement|null) => {
-    const selectedBtnType: ReservationBarBtnType|null = get(SelectedBtn);
-
-    switch(selectedBtnType) {
-      case null:
-        return null;
-
-      case ReservationBarBtnType.Location:
-        return <LocationSearch/>;
-
-      case ReservationBarBtnType.CheckIn:
-      case ReservationBarBtnType.CheckOut:
-        return <CalendarSlider/>;
-
-      case ReservationBarBtnType.PriceRange:
-        return <PricePlotSlider/>
-      // TODO: PriceRange, Personnel
-
-      default:
-        throw new Error(`Not existing index ${selectedBtnType}`);
-    }
-  }
 });
 
 export const LocationSearchState = atom<string>({
