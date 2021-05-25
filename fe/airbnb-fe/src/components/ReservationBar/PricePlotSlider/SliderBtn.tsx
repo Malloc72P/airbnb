@@ -25,6 +25,7 @@ const StyledSliderBtn = styled.div<StyledSliderBtnProps>`
   position: absolute;
   bottom: -1rem;
   cursor: pointer;
+  z-index: 1;
 
   &.left {
     left: -0.7rem;

@@ -1,26 +1,26 @@
 import styled from 'styled-components';
 import React, { useState, useEffect, useMemo, useRef, ReactElement } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import useFetch from 'util/hooks/useFetch';
 
-import { T_PriceRange } from '../atoms';
-import { PriceRange } from '../atoms';
-import { T_SliderBtnPosition } from './atoms';
-import { SliderBtnPosition } from './atoms';
+import { T_PriceRange, T_PriceRangeString } from '../atoms';
+import { PriceRange, PriceRangeString } from '../atoms';
+import { T_PlotData, T_BtnPositions } from './type';
 import CurvedPlot from './CurvedPlot';
 import SliderBtn from './SliderBtn';
 
-const MOCK_DATA = {
-  start: 10000,
+const MOCK_DATA: T_PlotData = {
+  from: 10000,
+  to: 1000000,
   unit: 1000,
+  scale: 20,
   data: [
-    3, 5, 0, 1, 2, 3, 4, 5, 4, 10, 20, 5, 4, 5, 2, 6, 0, 0, 0, 0
+    3, 5, 0, 1, 2, 3, 4, 5, 4, 10,
+    20, 5, 4, 5, 2, 6, 0, 0, 0, 0,
+    20, 5, 4, 5, 2, 6, 0, 0, 0, 0,
+    20, 5, 4, 5, 2, 6, 0, 0, 0, 0,
+    20, 5, 4, 5, 2, 6, 0, 0, 0, 0
   ]
-}
-
-type T_BtnPositions = {
-  left: number,
-  right: number
 }
 
 type PricePlotSliderProps = {
@@ -28,11 +28,13 @@ type PricePlotSliderProps = {
   plotHeight?: number,
 }
 
-function PricePlotSlider({ plotWidth = 400, plotHeight= 200 }: PricePlotSliderProps): ReactElement {
+function PricePlotSlider({ plotWidth = 500, plotHeight= 200 }: PricePlotSliderProps): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
-  const [priceRange, setPriceRange] = useRecoilState<T_PriceRange>(PriceRange);
+  const setPriceRange = useSetRecoilState<T_PriceRange>(PriceRange);
+  const priceRangeString = useRecoilValue<T_PriceRangeString>(PriceRangeString);
   const [btnPositions, setBtnPositions] = useState<T_BtnPositions>({ left: 0, right: plotWidth });
-  const response = MOCK_DATA;
+  const [unitWidth, setUnitWidth] = useState<number|null>(null);
+  const response: T_PlotData = MOCK_DATA; // FIXME: apply data fetching
 
   const getCurrPlotWidth = (): number => btnPositions.right - btnPositions.left;
 
@@ -43,6 +45,25 @@ function PricePlotSlider({ plotWidth = 400, plotHeight= 200 }: PricePlotSliderPr
       document.removeEventListener('mouseup', mouseEventHandlers.up);
     };
   }, []);
+
+  useEffect(() => {
+    if (response === null)
+      return;
+
+    // FIXME: magic number
+    setPriceRange({ from: response.from, to: response.to });
+    setUnitWidth(plotWidth * response.unit / (response.to - response.from));
+  }, [response]);
+
+  useEffect(() => {
+    if (unitWidth === null)
+      return;
+
+    setPriceRange({
+      from: response.from + response.unit * Math.floor(btnPositions.left / unitWidth),
+      to: response.from + response.unit * Math.ceil(btnPositions.right / unitWidth)
+    });
+  }, [btnPositions]);
 
   const mouseEventHandlers = useMemo(() => {
     let isLeftBtnDown: boolean = false;
@@ -55,8 +76,6 @@ function PricePlotSlider({ plotWidth = 400, plotHeight= 200 }: PricePlotSliderPr
     }
 
     const handleMouseMoveBtn = (evt: MouseEvent): void => {
-      console.log('test mouse move');
-
       if (startClientX === null)
         return;
 
@@ -80,7 +99,7 @@ function PricePlotSlider({ plotWidth = 400, plotHeight= 200 }: PricePlotSliderPr
 
         if (isLeftBtnDown && evt.clientX - startClientX > 0 && evt.clientX - startClientX < positions.right)
           return { ...positions, left: evt.clientX - startClientX };
-          
+
         if (isRightBtnDown && evt.clientX - startClientX < plotWidth && evt.clientX - startClientX > positions.left)
           return { ...positions, right: evt.clientX - startClientX };
           
@@ -112,13 +131,13 @@ function PricePlotSlider({ plotWidth = 400, plotHeight= 200 }: PricePlotSliderPr
   return (
     <StyledPricePlotSlider ref={ref} plotWidth={plotWidth} plotHeight={plotHeight}>
       <div>가격 범위</div>
-      <div>{priceRange.from}~{priceRange.to}</div>
+      <div>{priceRangeString.from} ~ {priceRangeString.to}</div>
       <div className='plot-cont'>
         <BackLight width={getCurrPlotWidth()} height={plotHeight} left={btnPositions.left}>
           <SliderBtn className='left' onMouseDown={mouseEventHandlers.downLeft}/>
           <SliderBtn className='right' onMouseDown={mouseEventHandlers.downRight}/>
         </BackLight>
-        <CurvedPlot width={plotWidth} height={plotHeight}/>
+        <CurvedPlot width={plotWidth} height={plotHeight} data={response}/>
       </div>
     </StyledPricePlotSlider>
   );
@@ -132,8 +151,6 @@ type StyledPricePlotSliderProps = {
 }
 
 const StyledPricePlotSlider = styled.div<StyledPricePlotSliderProps>`
-  box-shadow: 0 0 0 1px red inset;
-
   .plot-cont {
     width: ${props => `${props.plotWidth}px`};
     height: ${props => `${props.plotHeight}px`};
@@ -155,5 +172,5 @@ const BackLight = styled.div<BackLightProps>`
   position: relative;
   top: 0;
   left: ${props => `${props.left}px`};
-  background-color: #333333;
+  background-color: #000000;
 `;

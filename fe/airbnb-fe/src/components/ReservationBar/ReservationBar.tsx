@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import React, { useRef, ReactElement } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { ReservationBarBtnType, T_CheckInOut, T_CheckInOutString, T_PriceRange } from './atoms';
-import { SelectedBtn,  LocationSearchState, CheckInOutString, PriceRange } from './atoms';
+import { ReservationBarBtnType, T_CheckInOutString, T_PriceRangeString } from './atoms';
+import { SelectedBtn,  LocationSearchState, CheckInOutString, PriceRangeString } from './atoms';
 
 import ReservationBarBtn from './ReservationBarBtn';
 import ReservationBarDropPopup from './ReservationBarDropPopup';
@@ -18,10 +18,9 @@ type ReservationBarProps = {
 function ReservationBar({ className }: ReservationBarProps): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
   const [selectedBtn, setSelectedBtn] = useRecoilState<ReservationBarBtnType|null>(SelectedBtn);
-  // const dropPopupContent = useRecoilValue<ReactElement|null>(DropPopupContent);
   const [location, setLocation] = useRecoilState<string>(LocationSearchState);
   const checkInOutString = useRecoilValue<T_CheckInOutString>(CheckInOutString);
-  const priceRange = useRecoilValue<T_PriceRange>(PriceRange);
+  const priceRangeString = useRecoilValue<T_PriceRangeString>(PriceRangeString);
 
   const handleClickCaptureBtn = (currentTarget: HTMLDivElement): void => {
     setSelectedBtn((oldSelectedBtn: ReservationBarBtnType|null): ReservationBarBtnType|null => {
@@ -50,16 +49,14 @@ function ReservationBar({ className }: ReservationBarProps): ReactElement {
       case ReservationBarBtnType.CheckIn:
       case ReservationBarBtnType.CheckOut:
         return (
-          <ReservationBarDropPopup outsideBlacklist={[ref.current as HTMLElement]}
-            width='100%'>
+          <ReservationBarDropPopup outsideBlacklist={[ref.current as HTMLElement]} width='100%'>
             <CalendarSlider/>
           </ReservationBarDropPopup>
         );
 
       case ReservationBarBtnType.PriceRange:
         return (
-          <ReservationBarDropPopup outsideBlacklist={[ref.current as HTMLElement]}
-            right='0'>
+          <ReservationBarDropPopup outsideBlacklist={[ref.current as HTMLElement]} right='0'>
             <PricePlotSlider/>
           </ReservationBarDropPopup>
         );
@@ -89,7 +86,7 @@ function ReservationBar({ className }: ReservationBarProps): ReactElement {
       </ReservationBarBtn>
       <ReservationBarBtn dataBtnType={ReservationBarBtnType.PriceRange} onClickCapture={handleClickCaptureBtn}>
         <div className='title'>요금</div>
-        <div className='content'>tmp</div>
+        <div className='content'>{priceRangeString.from !== null ? `${priceRangeString.from} ~ ${priceRangeString.to}` : '금액대 설정'}</div>
       </ReservationBarBtn>
       <ReservationBarBtn /* TODO: dataBtnType={} */ className='with-btn' onClickCapture={handleClickCaptureBtn}>
         <div className='title'>인원</div>
@@ -105,7 +102,7 @@ function ReservationBar({ className }: ReservationBarProps): ReactElement {
 export default ReservationBar;
 
 const StyledReservationBar = styled.div`
-  width: 64rem;
+  width: 72rem;
   height: 4.5rem;
   display: flex;
   margin: 0 auto;
@@ -118,17 +115,20 @@ const StyledReservationBar = styled.div`
   position: relative;
 
   input {
+    width: 75%;
     border: none;
     outline: none;
     background-color: transparent;
   }
 
   .title {
+    height: 1.5em;
     font-weight: 800;
     font-size: 1em;
   }
 
   .content {
+    /* height: 1.1em; */
     color: #4F4F4F;
     font-size: 1.1em;
 

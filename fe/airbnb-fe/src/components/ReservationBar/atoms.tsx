@@ -62,3 +62,20 @@ export const PriceRange = atom<T_PriceRange>({
   }
 });
 
+export type T_PriceRangeString = {
+  from: string|null,
+  to: string|null
+};
+
+export const PriceRangeString = selector<T_PriceRangeString>({
+  key: 'PriceRangeString',
+  get: ({ get }): T_PriceRangeString => {
+    const priceRange: T_PriceRange = get(PriceRange);
+
+    return {
+      from: priceRange.from?.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }) ?? null,
+      to: priceRange.to?.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }) ?? null
+    };
+  }
+})
+
