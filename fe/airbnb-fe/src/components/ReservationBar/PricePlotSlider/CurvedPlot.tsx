@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 import React, { useRef, useEffect, ReactElement } from 'react';
 
-import { T_PlotData } from './type';
+export type T_PlotData = {
+  from: number,
+  to: number,
+  unit: number,
+  scale: number,
+  data: number[]
+};
 
 type CurvedPlotProps = {
   width: number,

@@ -5,8 +5,7 @@ import useFetch from 'util/hooks/useFetch';
 
 import { T_PriceRange, T_PriceRangeString } from '../atoms';
 import { PriceRange, PriceRangeString } from '../atoms';
-import { T_PlotData, T_BtnPositions } from './type';
-import CurvedPlot from './CurvedPlot';
+import CurvedPlot, { T_PlotData } from './CurvedPlot';
 import SliderBtn from './SliderBtn';
 
 const MOCK_DATA: T_PlotData = {
@@ -22,6 +21,11 @@ const MOCK_DATA: T_PlotData = {
     20, 5, 4, 5, 2, 6, 0, 0, 0, 0
   ]
 }
+
+type T_BtnPositions = {
+  left: number,
+  right: number
+};
 
 type PricePlotSliderProps = {
   plotWidth?: number,
