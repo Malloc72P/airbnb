@@ -47,12 +47,10 @@ function CalendarSlider({ className }: CalendarSliderProps): ReactElement {
 
   const handleClickLeft = (): void => {
     setLeftSlide(true);
-    console.log('leftslide');
   }
 
   const handleClickRight = (): void => {
     setRightSlide(true);
-    console.log('rightslide');
   }
 
   const handleTransitionEnd = (): void => {
@@ -168,7 +166,6 @@ const RightBtn = styled.button`
 
 const PositionRelativeDiv = styled.div`
   width: 100%;
-  /* height: 100%; */
   position: relative;
 
   .days-cont {

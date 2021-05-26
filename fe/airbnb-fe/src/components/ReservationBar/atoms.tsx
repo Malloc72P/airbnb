@@ -12,14 +12,14 @@ export const SelectedBtn = atom<ReservationBarBtnType|null>({
   default: null
 });
 
-export const LocationSearchState = atom<string>({
+export const LocationSearchState = atom<string|null>({
   key: 'LocationSearchState',
-  default: ''
+  default: null
 });
 
 export type T_CheckInOut = {
-  in: number | null,
-  out: number | null
+  in: number|null,
+  out: number|null
 };
 
 export const CheckInOut = atom<T_CheckInOut>({

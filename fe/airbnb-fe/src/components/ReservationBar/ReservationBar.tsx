@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import React, { useRef, ReactElement } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { ReservationBarBtnType, T_CheckInOutString, T_PriceRangeString } from './atoms';
-import { SelectedBtn,  LocationSearchState, CheckInOutString, PriceRangeString } from './atoms';
+import { ReservationBarBtnType, T_CheckInOut, T_CheckInOutString, T_PriceRange, T_PriceRangeString } from './atoms';
+import { SelectedBtn,  LocationSearchState, CheckInOut, CheckInOutString, PriceRange, PriceRangeString } from './atoms';
 
 import ReservationBarBtn from './ReservationBarBtn';
 import ReservationBarDropPopup from './ReservationBarDropPopup';
@@ -18,9 +18,15 @@ type ReservationBarProps = {
 function ReservationBar({ className }: ReservationBarProps): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
   const [selectedBtn, setSelectedBtn] = useRecoilState<ReservationBarBtnType|null>(SelectedBtn);
-  const [location, setLocation] = useRecoilState<string>(LocationSearchState);
+  const [location, setLocation] = useRecoilState<string|null>(LocationSearchState);
   const checkInOutString = useRecoilValue<T_CheckInOutString>(CheckInOutString);
+  const setCheckInOut = useSetRecoilState<T_CheckInOut>(CheckInOut);
   const priceRangeString = useRecoilValue<T_PriceRangeString>(PriceRangeString);
+  const setPriceRange = useSetRecoilState<T_PriceRange>(PriceRange);
+
+  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>): void => {
+    setLocation(target.value);
+  }
 
   const handleClickCaptureBtn = (currentTarget: HTMLDivElement): void => {
     setSelectedBtn((oldSelectedBtn: ReservationBarBtnType|null): ReservationBarBtnType|null => {
@@ -31,10 +37,6 @@ function ReservationBar({ className }: ReservationBarProps): ReactElement {
 
       return newSelectedBtn;
     });
-  }
-
-  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(target.value);
   }
 
   const renderDropPopup = (): ReactElement => {
@@ -70,25 +72,41 @@ function ReservationBar({ className }: ReservationBarProps): ReactElement {
 
   return (
     <StyledReservationBar className={className} ref={ref}>
-      <ReservationBarBtn dataBtnType={ReservationBarBtnType.Location} onClickCapture={handleClickCaptureBtn}>
+      <ReservationBarBtn
+        className={location ? 'entered' : ''}
+        dataBtnType={ReservationBarBtnType.Location}
+        onClickCapture={handleClickCaptureBtn}
+        resetContent={() => setLocation(null)}>
         <div className='title'>위치</div>
-        <input className={`content ${location.length ? 'entered' : ''}`} value={location} onChange={handleChange} placeholder={'어디로 여행가세요?'}/>
+        <input className={`content`} value={location ?? ''} onChange={handleChange} placeholder={'어디로 여행가세요?'}/>
       </ReservationBarBtn>
-      <ReservationBarBtn dataBtnType={ReservationBarBtnType.CheckIn} onClickCapture={handleClickCaptureBtn}>
+      <ReservationBarBtn
+        className={checkInOutString.in !== null ? 'entered' : ''}
+        dataBtnType={ReservationBarBtnType.CheckIn}
+        onClickCapture={handleClickCaptureBtn}
+        resetContent={() => setCheckInOut({ in: null, out: null })}>
         <div className='title'>체크인</div>
-        <div className={`content ${checkInOutString.in !== null ? 'entered' : ''}`}>{checkInOutString.in ?? '날짜 입력'}</div>
+        <div className={`content`}>{checkInOutString.in ?? '날짜 입력'}</div>
       </ReservationBarBtn>        
       <ReservationBarBtn
+        className={checkInOutString.out !== null ? 'entered' : ''}
         dataBtnType={ReservationBarBtnType.CheckOut}
-        onClickCapture={handleClickCaptureBtn}>
+        onClickCapture={handleClickCaptureBtn}
+        resetContent={() => setCheckInOut({ in: null, out: null })}>
         <div className='title'>체크아웃</div>
-        <div className={`content ${checkInOutString.out !== null ? 'entered' : ''}`}>{checkInOutString.out ?? '날짜 입력'}</div>
+        <div className={`content`}>{checkInOutString.out ?? '날짜 입력'}</div>
       </ReservationBarBtn>
-      <ReservationBarBtn dataBtnType={ReservationBarBtnType.PriceRange} onClickCapture={handleClickCaptureBtn}>
+      <ReservationBarBtn
+        className={priceRangeString.from !== null ? 'entered' : ''}
+        dataBtnType={ReservationBarBtnType.PriceRange}
+        onClickCapture={handleClickCaptureBtn}
+        resetContent={() => setPriceRange({ from: null, to: null })}>
         <div className='title'>요금</div>
         <div className='content'>{priceRangeString.from !== null ? `${priceRangeString.from} ~ ${priceRangeString.to}` : '금액대 설정'}</div>
       </ReservationBarBtn>
-      <ReservationBarBtn /* TODO: dataBtnType={} */ className='with-btn' onClickCapture={handleClickCaptureBtn}>
+      <ReservationBarBtn /* TODO: dataBtnType={} */ className='with-btn'
+        onClickCapture={handleClickCaptureBtn}
+        resetContent={() => {/* TODO */}}>
         <div className='title'>인원</div>
         <div className='content'>tmp</div>
         <button className='search-btn'>
@@ -113,35 +131,6 @@ const StyledReservationBar = styled.div`
   color: #010101;
   font-size: 14px;
   position: relative;
-
-  input {
-    width: 75%;
-    border: none;
-    outline: none;
-    background-color: transparent;
-  }
-
-  .title {
-    height: 1.5em;
-    font-weight: 800;
-    font-size: 1em;
-  }
-
-  .content {
-    /* height: 1.1em; */
-    color: #4F4F4F;
-    font-size: 1.1em;
-
-    &::placeholder {
-      color: #4F4F4F;
-      font-size: 1em;
-    }
-
-    &.entered {
-      color: #010101;
-      font-weight: 800;
-    }
-  }
 
   .search-btn {
     width: 3.5rem;

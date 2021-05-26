@@ -47,13 +47,13 @@ function PricePlotSlider({ plotWidth = 500, plotHeight= 200 }: PricePlotSliderPr
   }, []);
 
   useEffect(() => {
-    if (response === null)
+    if (priceRangeString.from !== null || response === null)
       return;
 
-    // FIXME: magic number
     setPriceRange({ from: response.from, to: response.to });
+    setBtnPositions({ left: 0, right: plotWidth });
     setUnitWidth(plotWidth * response.unit / (response.to - response.from));
-  }, [response]);
+  }, [response, priceRangeString]);
 
   useEffect(() => {
     if (unitWidth === null)
