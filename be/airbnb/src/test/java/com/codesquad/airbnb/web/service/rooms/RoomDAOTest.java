@@ -35,20 +35,37 @@ class RoomDAOTest {
     }
 
     private void verifyRoom(Room testTarget, Room expected) {
-        assertThat(testTarget).isNotNull();
-        assertThat(testTarget.getName()).isEqualTo(expected.getName());
-        assertThat(testTarget.getDescription()).isEqualTo(expected.getDescription());
-        assertThat(testTarget.getGuestCapacity()).isEqualTo(expected.getGuestCapacity());
-        assertThat(testTarget.getLocationId()).isEqualTo(expected.getLocationId());
-        assertThat(testTarget.getPoint()).isEqualTo(expected.getPoint());
-        assertThat(testTarget.getRating()).isEqualTo(expected.getRating());
-        assertThat(testTarget.getBathroomType()).isEqualTo(expected.getBathroomType());
-        assertThat(testTarget.getBedroomType()).isEqualTo(expected.getBedroomType());
-        assertThat(testTarget.getBedCount()).isEqualTo(expected.getBedCount());
-        assertThat(testTarget.getAmenity()).isEqualTo(expected.getAmenity());
-        assertThat(testTarget.getLocationName()).isEqualTo(expected.getLocationName());
-        assertThat(testTarget.getThumbnail()).isEqualTo(expected.getThumbnail());
-        assertThat(testTarget.getReviewCount()).isEqualTo(expected.getReviewCount());
+        assertThat(testTarget)
+                .extracting(
+                        Room::getName,
+                        Room::getDescription,
+                        Room::getGuestCapacity,
+                        Room::getLocationId,
+                        Room::getPoint,
+                        Room::getRating,
+                        Room::getBathroomType,
+                        Room::getBedroomType,
+                        Room::getBedCount,
+                        Room::getAmenity,
+                        Room::getLocationName,
+                        Room::getThumbnail,
+                        Room::getReviewCount)
+                .doesNotContainNull()
+                .containsExactly(
+                        expected.getName(),
+                        expected.getDescription(),
+                        expected.getGuestCapacity(),
+                        expected.getLocationId(),
+                        expected.getPoint(),
+                        expected.getRating(),
+                        expected.getBathroomType(),
+                        expected.getBedroomType(),
+                        expected.getBedCount(),
+                        expected.getAmenity(),
+                        expected.getLocationName(),
+                        expected.getThumbnail(),
+                        expected.getReviewCount()
+                );
     }
 
     @Test
@@ -65,12 +82,22 @@ class RoomDAOTest {
     }
 
     private void verifyPricePolicy(PricePolicy target, PricePolicy expected) {
-        assertThat(target).isNotNull();
-        assertThat(target.getPricePerDay()).isEqualTo(expected.getPricePerDay());
-        assertThat(target.getAccomodationTax()).isEqualTo(expected.getAccomodationTax());
-        assertThat(target.getCleanUpCost()).isEqualTo(expected.getCleanUpCost());
-        assertThat(target.getServiceFee()).isEqualTo(expected.getServiceFee());
-        assertThat(target.getWeeklyDiscount()).isEqualTo(expected.getWeeklyDiscount());
+        assertThat(target)
+                .extracting(
+                        PricePolicy::getPricePerDay,
+                        PricePolicy::getAccomodationTax,
+                        PricePolicy::getCleanUpCost,
+                        PricePolicy::getServiceFee,
+                        PricePolicy::getWeeklyDiscount
+                )
+                .doesNotContainNull()
+                .containsExactly(
+                        expected.getPricePerDay(),
+                        expected.getAccomodationTax(),
+                        expected.getCleanUpCost(),
+                        expected.getServiceFee(),
+                        expected.getWeeklyDiscount()
+                );
     }
 
     @Test
@@ -92,11 +119,20 @@ class RoomDAOTest {
     }
 
     private void verifyHost(Host target, Host expected) {
-        assertThat(target).isNotNull();
-        assertThat(target.getId()).isEqualTo(expected.getId());
-        assertThat(target.getName()).isEqualTo(expected.getName());
-        assertThat(target.isSuperhost()).isEqualTo(expected.isSuperhost());
-        assertThat(target.getProfileImage()).isEqualTo(expected.getProfileImage());
+        assertThat(target)
+                .extracting(
+                        Host::getId,
+                        Host::getName,
+                        Host::isSuperhost,
+                        Host::getProfileImage
+                )
+                .doesNotContainNull()
+                .containsExactly(
+                        expected.getId(),
+                        expected.getName(),
+                        expected.isSuperhost(),
+                        expected.getProfileImage()
+                );
     }
 
     @Test
@@ -114,8 +150,16 @@ class RoomDAOTest {
         for (int i = 0; i < target.size(); i++) {
             RoomImage targetImage = target.get(i);
             RoomImage expectedImage = expected.get(i);
-            assertThat(targetImage.getUrl()).isEqualTo(expectedImage.getUrl());
-            assertThat(targetImage.getIndex()).isEqualTo(expectedImage.getIndex());
+            assertThat(targetImage)
+                    .extracting(
+                            RoomImage::getUrl,
+                            RoomImage::getIndex
+                    )
+                    .doesNotContainNull()
+                    .containsExactly(
+                            expectedImage.getUrl(),
+                            expectedImage.getIndex()
+                    );
         }
     }
 
