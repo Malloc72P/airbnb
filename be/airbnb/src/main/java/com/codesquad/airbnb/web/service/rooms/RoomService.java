@@ -36,4 +36,8 @@ public class RoomService {
     public Room findRoom(int roomId) {
         return roomRepository.findRoomById(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));
     }
+
+    public Room saveRoom(Room room) {
+        return roomRepository.save(room);
+    }
 }

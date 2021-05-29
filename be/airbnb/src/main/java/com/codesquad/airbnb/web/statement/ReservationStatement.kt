@@ -11,6 +11,11 @@ from reservation
 where id = :id;
 """
 
+const val DELETE_RESERVATION: String = """
+delete from reservation
+where id = :id;
+"""
+
 const val IS_RESERVATIONABLE: String = """
 select if(count(id) = 0, true, false) reservationable
 from reservation rsv

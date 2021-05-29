@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 public class ReservationDtoConverter {
     public ReservationPreview reservationToReservationDetail(Reservation reservation) {
         return ReservationPreview.builder()
+                .id(reservation.getId())
                 .roomId(reservation.getRoomId())
                 .guestId(reservation.getGuestId())
                 .adultCount(reservation.getAdultCount())

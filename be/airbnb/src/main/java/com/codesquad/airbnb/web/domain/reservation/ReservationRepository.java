@@ -10,4 +10,6 @@ public interface ReservationRepository {
     Optional<Reservation> findReservationById(int reservationId);
 
     boolean isReservationable(int roomId, UserInput userInput);
+
+    void deleteReservation(int reservationId);
 }

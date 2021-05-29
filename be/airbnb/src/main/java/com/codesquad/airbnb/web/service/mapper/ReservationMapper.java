@@ -13,8 +13,8 @@ public class ReservationMapper implements RowMapper<Reservation> {
     public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Reservation.builder()
                 .id(rs.getInt(1))
-                .guestId(rs.getInt(2))
-                .roomId(rs.getInt(3))
+                .roomId(rs.getInt(2))
+                .guestId(rs.getInt(3))
                 .checkinDateTime(rs.getDate(4).toLocalDate())
                 .checkoutDateTime(rs.getDate(5).toLocalDate())
                 .adultCount(rs.getInt(6))

@@ -24,4 +24,11 @@ public class ReservationController {
                                               @CertifiedUser int userId) {
         return reservationService.makeReservation(roomId, userId, userInput);
     }
+
+    @DeleteMapping("{reservationId}")
+    public void deleteReservation(@PathVariable int roomId,
+                                  @PathVariable int reservationId,
+                                  @CertifiedUser int userId) {
+        reservationService.cancelReservation(reservationId, userId);
+    }
 }

@@ -72,4 +72,11 @@ public class ReservationDAO implements ReservationRepository {
         }
         return result;
     }
+
+    @Override
+    public void deleteReservation(int reservationId) {
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", reservationId);
+        jdbcTemplate.update(DELETE_RESERVATION, parameterSource);
+    }
 }

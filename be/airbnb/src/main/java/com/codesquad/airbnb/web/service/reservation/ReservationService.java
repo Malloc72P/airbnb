@@ -6,6 +6,7 @@ import com.codesquad.airbnb.web.domain.room.Room;
 import com.codesquad.airbnb.web.dto.ReservationPreview;
 import com.codesquad.airbnb.web.dto.UserInput;
 import com.codesquad.airbnb.web.exceptions.ReservationFailedException;
+import com.codesquad.airbnb.web.exceptions.notfound.ReservationNotFoundException;
 import com.codesquad.airbnb.web.service.rooms.RoomService;
 import com.codesquad.airbnb.web.service.users.UserService;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,18 @@ public class ReservationService {
         this.reservationDtoConverter = reservationDtoConverter;
         this.roomService = roomService;
         this.userService = userService;
+    }
+
+    @Transactional
+    public void cancelReservation(int reservationId, int guestId) {
+        Reservation reservation = findReservation(reservationId);
+        reservation.checkGuestIsOwner(guestId);
+        reservationRepository.deleteReservation(reservationId);
+    }
+
+    public Reservation findReservation(int reservationId) {
+        return reservationRepository.findReservationById(reservationId)
+                .orElseThrow(() -> new ReservationNotFoundException(reservationId));
     }
 
     @Transactional
