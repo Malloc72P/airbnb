@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.codesquad.airbnb.web.dto.UserInput.DATE_TIME_FORMATTER;
+import static com.codesquad.airbnb.web.dto.UserInput.DATE_FORMATTER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -126,8 +126,8 @@ class RoomDAOTest {
         roomDAO.save(room);
         UserInput userInput = UserInput.builder()
                 .location("서울특별시")
-                .checkIn(LocalDate.parse("2021-05-01", DATE_TIME_FORMATTER))
-                .checkOut(LocalDate.parse("2021-05-02", DATE_TIME_FORMATTER))
+                .checkIn(LocalDate.parse("2021-05-01", DATE_FORMATTER))
+                .checkOut(LocalDate.parse("2021-05-02", DATE_FORMATTER))
                 .priceMinimum(1)
                 .priceMaximum(10_000_000)
                 .adultCount(1)

@@ -30,11 +30,11 @@ public class TokenService {
         return JWT.create()
                 .withIssuer(jwtSecret.getIssuer())
                 .withClaim(CLAIM_KEY_USER_ID, userId)
-                .withExpiresAt(toDate(expireAt))
+                .withExpiresAt(toDateTime(expireAt))
                 .sign(Algorithm.HMAC256(jwtSecret.getSecretKey()));
     }
 
-    private Date toDate(LocalDateTime localDateTime) {
+    private Date toDateTime(LocalDateTime localDateTime) {
         return Date.from(localDateTime.toInstant(ZoneOffset.of("+9")));
     }
 

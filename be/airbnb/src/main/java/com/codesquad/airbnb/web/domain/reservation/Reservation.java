@@ -14,8 +14,8 @@ public class Reservation {
     private int id;
     private int guestId;
     private int roomId;
-    private LocalDate checkinDateTime;
-    private LocalDate checkoutDateTime;
+    private LocalDate checkinDate;
+    private LocalDate checkoutDate;
     private int adultCount;
     private int childCount;
     private int infantCount;

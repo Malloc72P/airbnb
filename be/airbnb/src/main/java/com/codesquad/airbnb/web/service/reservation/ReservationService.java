@@ -67,8 +67,8 @@ public class ReservationService {
                 .adultCount(userInput.getAdultCount())
                 .childCount(userInput.getChildCount())
                 .infantCount(userInput.getInfantCount())
-                .checkinDateTime(userInput.getCheckIn())
-                .checkoutDateTime(userInput.getCheckOut())
+                .checkinDate(userInput.getCheckIn())
+                .checkoutDate(userInput.getCheckOut())
                 .build();
     }
 

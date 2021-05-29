@@ -80,7 +80,7 @@ values (1, 500, 1000, 2500, 20000, 5),
        (8, 500, 1000, 2500, 50000, 5)
 ;
 
-insert into reservation(id, room_id, guest_id, checkin_date_time, checkout_date_time, adult_count, child_count,
+insert into reservation(id, room_id, guest_id, checkin_date, checkout_date, adult_count, child_count,
                         infant_count)
 values (1, 1, 2, '2021-06-20', '2021-06-25', 2, 0, 0),
        (2, 1, 2, '2021-06-27', '2021-06-28', 2, 0, 0),

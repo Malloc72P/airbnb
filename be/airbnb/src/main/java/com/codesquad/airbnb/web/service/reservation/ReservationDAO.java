@@ -38,8 +38,8 @@ public class ReservationDAO implements ReservationRepository {
         MapSqlParameterSource parameter = new MapSqlParameterSource()
                 .addValue("room_id", reservation.getRoomId())
                 .addValue("guest_id", reservation.getGuestId())
-                .addValue("checkin_date_time", reservation.getCheckinDateTime())
-                .addValue("checkout_date_time", reservation.getCheckoutDateTime())
+                .addValue("checkin_date", reservation.getCheckinDate())
+                .addValue("checkout_date", reservation.getCheckoutDate())
                 .addValue("adult_count", reservation.getAdultCount())
                 .addValue("child_count", reservation.getChildCount())
                 .addValue("infant_count", reservation.getInfantCount());

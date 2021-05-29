@@ -1,7 +1,10 @@
 package com.codesquad.airbnb.web.service.reservation;
 
 import com.codesquad.airbnb.web.domain.reservation.Reservation;
-import com.codesquad.airbnb.web.domain.room.*;
+import com.codesquad.airbnb.web.domain.room.BathroomType;
+import com.codesquad.airbnb.web.domain.room.BedroomType;
+import com.codesquad.airbnb.web.domain.room.PricePolicy;
+import com.codesquad.airbnb.web.domain.room.Room;
 import com.codesquad.airbnb.web.domain.user.Host;
 import com.codesquad.airbnb.web.dto.ReservationPreview;
 import com.codesquad.airbnb.web.dto.UserInput;
@@ -16,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
-import static com.codesquad.airbnb.web.dto.UserInput.DATE_TIME_FORMATTER;
+import static com.codesquad.airbnb.web.dto.UserInput.DATE_FORMATTER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -42,8 +45,8 @@ class ReservationServiceTest {
 
     private void testReservation(UserInput userInput, Reservation reservation) {
         assertThat(reservation)
-                .extracting(Reservation::getCheckinDateTime,
-                        Reservation::getCheckoutDateTime,
+                .extracting(Reservation::getCheckinDate,
+                        Reservation::getCheckoutDate,
                         Reservation::getAdultCount,
                         Reservation::getChildCount,
                         Reservation::getInfantCount)
@@ -80,8 +83,8 @@ class ReservationServiceTest {
 
     private UserInput createUserInput() {
         return UserInput.builder()
-                .checkIn(LocalDate.parse("2021-05-01", DATE_TIME_FORMATTER))
-                .checkOut(LocalDate.parse("2021-05-02", DATE_TIME_FORMATTER))
+                .checkIn(LocalDate.parse("2021-05-01", DATE_FORMATTER))
+                .checkOut(LocalDate.parse("2021-05-02", DATE_FORMATTER))
                 .adultCount(1)
                 .childCount(0)
                 .infantCount(0)

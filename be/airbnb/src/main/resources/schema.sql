@@ -81,8 +81,8 @@ create table `reservation`
     id                 int primary key auto_increment,
     guest_id           int references guest (user_id),
     room_id            int references room (id),
-    checkin_date_time  date,
-    checkout_date_time date,
+    checkin_date  date,
+    checkout_date date,
     adult_count        int,
     child_count        int,
     infant_count       int

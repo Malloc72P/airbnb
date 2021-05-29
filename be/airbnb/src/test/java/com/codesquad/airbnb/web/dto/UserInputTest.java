@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static com.codesquad.airbnb.web.dto.UserInput.DATE_TIME_FORMATTER;
+import static com.codesquad.airbnb.web.dto.UserInput.DATE_FORMATTER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -22,8 +22,8 @@ class UserInputTest {
 
     private void testStayDay(String checkIn, String checkOut, int stay) {
         UserInput userInput = UserInput.builder()
-                .checkIn(LocalDate.parse(checkIn, DATE_TIME_FORMATTER))
-                .checkOut(LocalDate.parse(checkOut, DATE_TIME_FORMATTER))
+                .checkIn(LocalDate.parse(checkIn, DATE_FORMATTER))
+                .checkOut(LocalDate.parse(checkOut, DATE_FORMATTER))
                 .build();
         long stayDay = userInput.stayDay();
         assertThat(stayDay).isEqualTo(stay);
@@ -33,8 +33,8 @@ class UserInputTest {
     @DisplayName("숙박기간 에러 테스트")
     public void testErrorStayDay() {
         UserInput userInput = UserInput.builder()
-                .checkIn(LocalDate.parse("2021-05-01", DATE_TIME_FORMATTER))
-                .checkOut(LocalDate.parse("2021-04-01", DATE_TIME_FORMATTER))
+                .checkIn(LocalDate.parse("2021-05-01", DATE_FORMATTER))
+                .checkOut(LocalDate.parse("2021-04-01", DATE_FORMATTER))
                 .build();
         assertThatThrownBy(userInput::checkStayDurationAvailable)
                 .isInstanceOf(InvalidUserInputException.class)

@@ -14,8 +14,8 @@ public class ReservationDtoConverter {
                 .adultCount(reservation.getAdultCount())
                 .childCount(reservation.getChildCount())
                 .infantCount(reservation.getInfantCount())
-                .checkinDateTime(reservation.getCheckinDateTime())
-                .checkoutDateTime(reservation.getCheckoutDateTime())
+                .checkinDate(reservation.getCheckinDate())
+                .checkoutDate(reservation.getCheckoutDate())
                 .build();
     }
 }

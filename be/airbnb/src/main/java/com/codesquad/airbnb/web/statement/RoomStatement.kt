@@ -72,7 +72,7 @@ and (
     select if(count(id) = 0, true, false) reservationable
 from reservation rsv
 where rsv.room_id = r.id
-  and rsv.checkin_date_time < :stay_end
-  and rsv.checkout_date_time > :stay_start
+  and rsv.checkin_date < :stay_end
+  and rsv.checkout_date > :stay_start
 )
 """
