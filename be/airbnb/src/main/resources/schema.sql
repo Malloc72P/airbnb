@@ -5,7 +5,6 @@ drop table if exists `guest`;
 drop table if exists location;
 drop table if exists room;
 drop table if exists reservation;
-drop table if exists room_price;
 drop table if exists room_image;
 set foreign_key_checks = 1;
 
@@ -23,12 +22,14 @@ create table `host`
 (
     user_id      int not null,
     is_superhost bool,
+    primary key (user_id),
     foreign key (user_id) references `user` (id)
 );
 
 create table `guest`
 (
     user_id int not null,
+    primary key (user_id),
     foreign key (user_id) references `user` (id)
 );
 
@@ -60,20 +61,13 @@ create table `room`
     amenity        varchar(50),
     review_count   int,
     thumbnail      varchar(300),
-    foreign key (location_id) references location (id),
-    foreign key (host_id) references host (user_id)
-);
-
-create table `room_price`
-(
-    id               int primary key auto_increment,
-    room_id          int not null,
     service_fee      int,
     accomodation_tax int,
     clean_up_cost    int,
     price_per_day    int,
     weekly_discount  int,
-    foreign key (room_id) references room (id)
+    foreign key (location_id) references location (id),
+    foreign key (host_id) references host (user_id)
 );
 
 create table `room_image`

@@ -36,6 +36,7 @@ public class RoomDAO implements RoomRepository {
     @Override
     public Room save(Room room) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        PricePolicy pricePolicy = room.getPricePolicy();
         MapSqlParameterSource parameter = new MapSqlParameterSource()
                 .addValue("location_id", room.getLocationId())
                 .addValue("name", room.getName())
@@ -50,25 +51,16 @@ public class RoomDAO implements RoomRepository {
                 .addValue("amenity", room.getAmenity())
                 .addValue("review_count", room.getReviewCount())
                 .addValue("thumbnail", room.getThumbnail())
-                .addValue("host_id", room.getHost().getId());
-        jdbcTemplate.update(SAVE_ROOM, parameter, keyHolder);
-        room.updateId(Objects.requireNonNull(keyHolder.getKey()).intValue());
-
-        savePricePolicy(room);
-        saveRoomImages(room);
-        return room;
-    }
-
-    private void savePricePolicy(Room room) {
-        PricePolicy pricePolicy = room.getPricePolicy();
-        MapSqlParameterSource parameter = new MapSqlParameterSource()
-                .addValue("room_id", room.getId())
+                .addValue("host_id", room.getHost().getId())
                 .addValue("service_fee", pricePolicy.getServiceFee())
                 .addValue("accomodation_tax", pricePolicy.getAccomodationTax())
                 .addValue("clean_up_cost", pricePolicy.getCleanUpCost())
                 .addValue("price_per_day", pricePolicy.getPricePerDay())
                 .addValue("weekly_discount", pricePolicy.getWeeklyDiscount());
-        jdbcTemplate.update(SAVE_PRICE_POLICY, parameter);
+        jdbcTemplate.update(SAVE_ROOM, parameter, keyHolder);
+        room.updateId(Objects.requireNonNull(keyHolder.getKey()).intValue());
+        saveRoomImages(room);
+        return room;
     }
 
     private void saveRoomImages(Room room) {

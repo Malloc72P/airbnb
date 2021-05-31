@@ -28,31 +28,31 @@ VALUES (1, '대한민국', 'NATION', null, 1, 'ChIJzWXFYYuifDUR64Pq5LTtioU', POI
        (13, '동이리', 'VILLAGE', 11, 5, 'ChIJ01VA53nffDURt9m_xoktSJo', POINT(37.473553, 127.03067));
 
 insert into room(id, location_id, name, rating, guest_capacity, point, description, bathroom_type, bedroom_type,
-                 bed_count, amenity, host_id, thumbnail)
+                 bed_count, amenity, host_id, thumbnail, service_fee, accomodation_tax, clean_up_cost, price_per_day, weekly_discount)
 values (1, 4, '숙소 A', 5, 5, POINT(37.252352, 235.52532), '숙소 A 소개', 'PRIVATE_BATHROOM', 'ONE_ROOM', 2,
         '주방, 무선인터넷, 에어컨, 헤어드라이어', 1,
-        'https://pix10.agoda.net/hotelImages/8515928/-1/2757b14c0680924208c33f286eab4c46.jpg?s=1024x768'),
+        'https://pix10.agoda.net/hotelImages/8515928/-1/2757b14c0680924208c33f286eab4c46.jpg?s=1024x768',500, 1000, 2500, 20000, 5),
        (2, 4, '숙소 B', 0.5, 3, POINT(31.25144, 935.52532), '숙소 B 소개', 'PRIVATE_BATHROOM', 'ONE_ROOM', 2,
         '주방, 무선인터넷, 에어컨, 헤어드라이어', 1,
-        'https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768'),
+        'https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768',500, 1000, 2500, 20000, 5),
        (3, 4, '숙소 C', 1.0, 1, POINT(27.252352, 235.52532), '숙소 C 소개', 'SHARED_BATHROOM', 'BEDROOM', 3,
         '주방, 무선인터넷, 에어컨, 헤어드라이어', 1,
-        'https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_450,q_auto,w_450/itemimages/96/95/96959_v6.jpeg'),
+        'https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_450,q_auto,w_450/itemimages/96/95/96959_v6.jpeg',500, 1000, 2500, 100000, 5),
        (4, 12, '숙소 D', 5, 2, POINT(37.252352, 235.52532), '숙소 D 소개', 'PRIVATE_BATHROOM', 'BEDROOM', 4,
         '주방, 무선인터넷, 에어컨, 헤어드라이어', 1,
-        'https://storage.googleapis.com/static-content-hc/sites/default/files/cataloina_porto_doble_balcon2_2.jpg'),
+        'https://storage.googleapis.com/static-content-hc/sites/default/files/cataloina_porto_doble_balcon2_2.jpg',500, 1000, 2500, 20000, 5),
        (5, 13, '숙소 E', 0.5, 4, POINT(17.252352, 125.52532), '숙소 E 소개', 'SHARED_BATHROOM', 'BEDROOM', 5,
         '주방, 무선인터넷, 에어컨, 헤어드라이어', 1,
-        'https://media-cdn.tripadvisor.com/media/photo-s/15/a1/d2/af/hotel-r-de-paris.jpg'),
+        'https://media-cdn.tripadvisor.com/media/photo-s/15/a1/d2/af/hotel-r-de-paris.jpg',500, 1000, 2500, 30000, 5),
        (6, 5, '숙소 F', 0.5, 4, POINT(17.252352, 125.52532), '숙소 F 소개', 'SHARED_BATHROOM', 'BEDROOM', 5,
         '주방, 무선인터넷, 에어컨, 헤어드라이어', 1,
-        'https://media-cdn.tripadvisor.com/media/photo-s/15/a1/d2/af/hotel-r-de-paris.jpg'),
+        'https://media-cdn.tripadvisor.com/media/photo-s/15/a1/d2/af/hotel-r-de-paris.jpg',500, 1000, 2500, 70000, 5),
        (7, 6, '숙소 G', 0.5, 4, POINT(17.252352, 125.52532), '숙소 G 소개', 'SHARED_BATHROOM', 'BEDROOM', 5,
         '주방, 무선인터넷, 에어컨, 헤어드라이어', 1,
-        'https://media-cdn.tripadvisor.com/media/photo-s/15/a1/d2/af/hotel-r-de-paris.jpg'),
+        'https://media-cdn.tripadvisor.com/media/photo-s/15/a1/d2/af/hotel-r-de-paris.jpg',500, 1000, 2500, 110000, 5),
        (8, 8, '숙소 H', 0.5, 4, POINT(17.252352, 125.52532), '숙소 H 소개', 'SHARED_BATHROOM', 'BEDROOM', 5,
         '주방, 무선인터넷, 에어컨, 헤어드라이어', 1,
-        'https://media-cdn.tripadvisor.com/media/photo-s/15/a1/d2/af/hotel-r-de-paris.jpg')
+        'https://media-cdn.tripadvisor.com/media/photo-s/15/a1/d2/af/hotel-r-de-paris.jpg',500, 1000, 2500, 100000, 5)
 ;
 
 insert into room_image(room_id, image_url, image_index)
@@ -81,17 +81,6 @@ values (1, 'https://a0.muscache.com/im/pictures/f6e9a07a-8a17-4d14-8a42-4fc3e3b5
        (8, 'https://a0.muscache.com/im/pictures/cc2371de-4386-4f2c-80ce-763ca32bc058.jpg?im_w=720', 2),
        (8, 'https://a0.muscache.com/im/pictures/56cccaca-04fd-48d6-9877-13f41b037cab.jpg?im_w=1200', 3)
 ;
-
-
-insert into room_price (room_id, service_fee, accomodation_tax, clean_up_cost, price_per_day, weekly_discount)
-values (1, 500, 1000, 2500, 20000, 5),
-       (2, 500, 1000, 2500, 20000, 5),
-       (3, 500, 1000, 2500, 100000, 5),
-       (4, 500, 1000, 2500, 20000, 5),
-       (5, 500, 1000, 2500, 30000, 5),
-       (6, 500, 1000, 2500, 70000, 5),
-       (7, 500, 1000, 2500, 110000, 5),
-       (8, 500, 1000, 2500, 100000, 5)
 ;
 
 insert into reservation(id, room_id, guest_id, checkin_date, checkout_date, adult_count, child_count,
