@@ -1,3 +1,17 @@
+insert into user (id, oauth_id, authenticated_by, nickname, name, profile_image, access_token)
+values (1, 'kachinsky', 'GITHUB', 'Kachinsky', 'Milo Kachinsky',
+        'https://static.wikia.nocookie.net/starcraft/images/d/d5/Kachinsky_SC2_Head1.jpg/revision/latest/top-crop/width/360/height/360?cb=20100722105327',
+        'kachinsky_token')
+     ,(2, 'doctor', 'GITHUB', 'capaldiDoctor', 'peter capaldi',
+       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfMhZZ18nRIxY6J-BF-n45XD21XNKzw1xh1A&usqp=CAU',
+       'doctor_token');
+
+insert into host (user_id, is_superhost)
+values (1, true);
+
+insert into guest (user_id)
+values (2);
+
 insert into location (id, name, type, parent_id, level, place_id, point)
 VALUES (1, '대한민국', 'NATION', null, 1, 'ChIJzWXFYYuifDUR64Pq5LTtioU', POINT(37.59073, 126.97406)),
        (2, '서울특별시', 'CITY', 1, 2, 'ChIJzWXFYYuifDUR64Pq5LTtioU', POINT(37.59073, 126.97406)),
@@ -71,13 +85,13 @@ values (1, 'https://a0.muscache.com/im/pictures/f6e9a07a-8a17-4d14-8a42-4fc3e3b5
 
 insert into room_price (room_id, service_fee, accomodation_tax, clean_up_cost, price_per_day, weekly_discount)
 values (1, 500, 1000, 2500, 20000, 5),
-       (2, 500, 1000, 2500, 50000, 5),
+       (2, 500, 1000, 2500, 20000, 5),
        (3, 500, 1000, 2500, 100000, 5),
-       (4, 500, 1000, 2500, 60000, 5),
-       (5, 500, 1000, 2500, 50000, 5),
-       (6, 500, 1000, 2500, 50000, 5),
-       (7, 500, 1000, 2500, 50000, 5),
-       (8, 500, 1000, 2500, 50000, 5)
+       (4, 500, 1000, 2500, 20000, 5),
+       (5, 500, 1000, 2500, 30000, 5),
+       (6, 500, 1000, 2500, 70000, 5),
+       (7, 500, 1000, 2500, 110000, 5),
+       (8, 500, 1000, 2500, 100000, 5)
 ;
 
 insert into reservation(id, room_id, guest_id, checkin_date, checkout_date, adult_count, child_count,
@@ -89,16 +103,3 @@ values (1, 1, 2, '2021-06-20', '2021-06-25', 2, 0, 0),
        (5, 3, 2, '2021-06-30', '2021-07-02', 2, 0, 0)
 ;
 
-insert into user (id, oauth_id, authenticated_by, nickname, name, profile_image, access_token)
-values (1, 'kachinsky', 'GITHUB', 'Kachinsky', 'Milo Kachinsky',
-        'https://static.wikia.nocookie.net/starcraft/images/d/d5/Kachinsky_SC2_Head1.jpg/revision/latest/top-crop/width/360/height/360?cb=20100722105327',
-        'kachinsky_token')
-        ,(2, 'doctor', 'GITHUB', 'capaldiDoctor', 'peter capaldi',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfMhZZ18nRIxY6J-BF-n45XD21XNKzw1xh1A&usqp=CAU',
-        'doctor_token');
-
-insert into host (user_id, is_superhost)
-values (1, true);
-
-insert into guest (user_id)
-values (2);
