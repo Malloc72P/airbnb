@@ -135,8 +135,7 @@ public class RoomDAO implements RoomRepository {
     private void addPriceRange(UserInput userInput, StringBuilder sqlBuilder, MapSqlParameterSource parameter) {
         if (userInput.checkPriceRangeAvailable()) {
             sqlBuilder.append(FILTERING_PRICE);
-            parameter.addValue("stay_day", userInput.stayDay())
-                    .addValue("cost_minimum", userInput.getPriceMinimum())
+            parameter.addValue("cost_minimum", userInput.getPriceMinimum())
                     .addValue("cost_maximum", userInput.getPriceMaximum());
         }
     }

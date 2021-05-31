@@ -60,7 +60,7 @@ where r.location_id in (target_location.id)
 """
 
 const val FILTERING_PRICE: String = """
-and (((price_per_day + service_fee + clean_up_cost) * :stay_day) * (100 - rp.weekly_discount * floor(:stay_day/7)) / 100) between :cost_minimum and :cost_maximum
+and price_per_day between :cost_minimum and :cost_maximum
 """
 
 const val FILTERING_GUEST_COUNT: String = """
