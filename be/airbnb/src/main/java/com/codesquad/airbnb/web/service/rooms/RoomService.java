@@ -15,6 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.codesquad.airbnb.web.constants.PriceConstants.PRICE_STEP;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -58,8 +60,8 @@ public class RoomService {
     }
 
     private int calculateKey(int price) {
-        int priceHeader = price / 10000;
-        return priceHeader * 10000;
+        int priceHeader = price / PRICE_STEP;
+        return priceHeader * PRICE_STEP;
     }
 
     private int calculateCount(Map<Integer, Integer> priceMap, int key) {
