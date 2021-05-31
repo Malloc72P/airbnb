@@ -5,6 +5,7 @@ import com.codesquad.airbnb.web.domain.room.Room;
 import com.codesquad.airbnb.web.domain.room.RoomImage;
 import com.codesquad.airbnb.web.domain.room.RoomRepository;
 import com.codesquad.airbnb.web.dto.UserInput;
+import com.codesquad.airbnb.web.service.mapper.IntegerMapper;
 import com.codesquad.airbnb.web.service.mapper.RoomImageMapper;
 import com.codesquad.airbnb.web.service.mapper.RoomMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,12 +26,22 @@ public class RoomDAO implements RoomRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final RoomMapper roomMapper;
+    private final IntegerMapper integerMapper;
     private final RoomImageMapper roomImageMapper;
 
-    public RoomDAO(NamedParameterJdbcTemplate jdbcTemplate, RoomMapper roomMapper, RoomImageMapper roomImageMapper) {
+    public RoomDAO(NamedParameterJdbcTemplate jdbcTemplate,
+                   RoomMapper roomMapper,
+                   IntegerMapper integerMapper,
+                   RoomImageMapper roomImageMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.roomMapper = roomMapper;
+        this.integerMapper = integerMapper;
         this.roomImageMapper = roomImageMapper;
+    }
+
+    @Override
+    public List<Integer> findPrices() {
+        return jdbcTemplate.query(SEARCH_ALL_PRICE, new MapSqlParameterSource(), integerMapper);
     }
 
     @Override

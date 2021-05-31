@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @Slf4j
 @RestController
 @RequestMapping("/rooms")
@@ -29,5 +31,10 @@ public class RoomsController {
     @GetMapping("/{roomId}")
     public RoomDetail roomDetail(@PathVariable int roomId, UserInput userInput) {
         return roomService.showRoomDetail(roomId, userInput);
+    }
+
+    @GetMapping("/prices")
+    public HashMap<Integer, Integer> showPriceRange() {
+        return roomService.showPriceRange();
     }
 }

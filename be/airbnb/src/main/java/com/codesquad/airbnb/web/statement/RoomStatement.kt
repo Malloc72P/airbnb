@@ -66,3 +66,9 @@ where rsv.room_id = r.id
   and rsv.checkout_date > :stay_start
 )
 """
+
+const val SEARCH_ALL_PRICE: String = """
+select price_per_day from room
+group by price_per_day
+order by price_per_day;
+"""

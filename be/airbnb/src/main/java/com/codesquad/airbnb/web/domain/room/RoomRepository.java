@@ -11,4 +11,6 @@ public interface RoomRepository {
     Optional<Room> findRoomById(int id);
 
     List<Room> findRoomsByUserInput(UserInput userInput);
+
+    List<Integer> findPrices();
 }

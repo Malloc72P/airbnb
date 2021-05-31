@@ -6,11 +6,15 @@ import com.codesquad.airbnb.web.dto.RoomDetail;
 import com.codesquad.airbnb.web.dto.RoomPreviews;
 import com.codesquad.airbnb.web.dto.UserInput;
 import com.codesquad.airbnb.web.exceptions.notfound.RoomNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class RoomService {
@@ -39,5 +43,24 @@ public class RoomService {
 
     public Room saveRoom(Room room) {
         return roomRepository.save(room);
+    }
+
+    public HashMap<Integer, Integer> showPriceRange() {
+        List<Integer> prices = roomRepository.findPrices();
+        HashMap<Integer, Integer> priceMap = new LinkedHashMap<>();
+        for (Integer price : prices) {
+            int key = calculateKey(price);
+            int count = 1;
+            if (priceMap.containsKey(key)) {
+                count = priceMap.get(key) + 1;
+            }
+            priceMap.put(key, count);
+        }
+        return priceMap;
+    }
+
+    private int calculateKey(int price) {
+        int priceHeader = price / 10000;
+        return priceHeader * 10000;
     }
 }
