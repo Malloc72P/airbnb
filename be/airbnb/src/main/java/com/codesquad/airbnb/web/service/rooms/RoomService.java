@@ -6,7 +6,6 @@ import com.codesquad.airbnb.web.dto.RoomDetail;
 import com.codesquad.airbnb.web.dto.RoomPreviews;
 import com.codesquad.airbnb.web.dto.UserInput;
 import com.codesquad.airbnb.web.exceptions.notfound.RoomNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,6 @@ import java.util.Map;
 
 import static com.codesquad.airbnb.web.constants.PriceConstants.PRICE_STEP;
 
-@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class RoomService {
