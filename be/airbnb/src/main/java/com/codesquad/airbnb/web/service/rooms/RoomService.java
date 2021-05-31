@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -50,10 +51,7 @@ public class RoomService {
         HashMap<Integer, Integer> priceMap = new LinkedHashMap<>();
         for (Integer price : prices) {
             int key = calculateKey(price);
-            int count = 1;
-            if (priceMap.containsKey(key)) {
-                count = priceMap.get(key) + 1;
-            }
+            int count = calculateCount(priceMap, key);
             priceMap.put(key, count);
         }
         return priceMap;
@@ -62,5 +60,13 @@ public class RoomService {
     private int calculateKey(int price) {
         int priceHeader = price / 10000;
         return priceHeader * 10000;
+    }
+
+    private int calculateCount(Map<Integer, Integer> priceMap, int key) {
+        int count = 1;
+        if (priceMap.containsKey(key)) {
+            count = priceMap.get(key) + 1;
+        }
+        return count;
     }
 }
