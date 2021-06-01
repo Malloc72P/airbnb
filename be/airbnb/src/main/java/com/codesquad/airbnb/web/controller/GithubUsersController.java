@@ -34,9 +34,9 @@ public class GithubUsersController {
                                 @RequestHeader(value = "User-Agent") String userAgent) throws IOException {
         if (userAgent.matches(RegexConstants.IOS_USER_AGENT_PATTERN)) {
             return oauthDataService.createLoginData();
-        } else {
-            response.sendRedirect(oauthDataService.githubLoginUrl());
         }
+        response.sendRedirect(oauthDataService.githubLoginUrl());
+        return oauthDataService.createLoginData();
     }
 
     @GetMapping("/callback")
