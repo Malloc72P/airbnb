@@ -15,7 +15,11 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:dev_secret.properties")
 public class OAuthSecret {
     private String clientIdKey;
-    private String clientIdValue;
     private String clientSecretKey;
-    private String clientSecretValue;
+
+    private String iosClientIdValue;
+    private String iosClientSecretValue;
+
+    private String feClientIdValue;
+    private String feClientSecretValue;
 }

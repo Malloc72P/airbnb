@@ -34,10 +34,10 @@ public class GithubApiRequester implements OauthApiRequester {
     }
 
     @Override
-    public String accessToken(String code) {
+    public String accessToken(String code, String clientId, String clientSecret) {
         RequestAccessToken requestAccessToken = RequestAccessToken.builder()
-                .clientId(OAuthSecret.getClientIdValue())
-                .clientSecret(OAuthSecret.getClientSecretValue())
+                .clientId(clientId)
+                .clientSecret(clientSecret)
                 .code(code)
                 .build();
         ReceivedAccessToken receivedAccessToken = apiRequester.callApi(githubApi.getAccessTokenUrl(), HttpMethod.POST,

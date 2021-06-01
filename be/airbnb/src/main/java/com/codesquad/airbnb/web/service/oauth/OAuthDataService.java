@@ -15,19 +15,19 @@ public class OAuthDataService {
         this.oauthSecret = oauthSecret;
     }
 
-    public String githubLoginUrl() {
+    public String githubFeLoginUrl() {
         return githubApi.getLoginUrl() +
                 "?" +
                 oauthSecret.getClientIdKey() +
                 "=" +
-                oauthSecret.getClientIdValue() +
+                oauthSecret.getFeClientIdValue() +
                 "&" +
                 githubApi.getScopeKey() +
                 "=" +
                 githubApi.getScopeValue();
     }
 
-    public OAuthLoginData createLoginData() {
-        return new OAuthLoginData(oauthSecret.getClientIdValue(), githubApi.getScopeValue());
+    public OAuthLoginData createIosOAuthData() {
+        return new OAuthLoginData(oauthSecret.getIosClientIdValue(), githubApi.getScopeValue());
     }
 }
