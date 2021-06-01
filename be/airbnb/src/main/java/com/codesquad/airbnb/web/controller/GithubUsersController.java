@@ -1,7 +1,7 @@
 package com.codesquad.airbnb.web.controller;
 
+import com.codesquad.airbnb.web.config.annotation.UserAgent;
 import com.codesquad.airbnb.web.config.properties.OAuthSecret;
-import com.codesquad.airbnb.web.constants.RegexConstants;
 import com.codesquad.airbnb.web.domain.user.User;
 import com.codesquad.airbnb.web.domain.user.UserAgentEnum;
 import com.codesquad.airbnb.web.dto.OAuthLoginData;
@@ -10,7 +10,10 @@ import com.codesquad.airbnb.web.service.oauth.OAuthDataService;
 import com.codesquad.airbnb.web.service.oauth.OauthApiRequester;
 import com.codesquad.airbnb.web.service.users.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -37,8 +40,7 @@ public class GithubUsersController {
 
     @GetMapping("/login")
     public OAuthLoginData login(HttpServletResponse response,
-                                @RequestHeader(value = "User-Agent") String stringUserAgent) throws IOException {
-        UserAgentEnum userAgent = extractUserAgent(stringUserAgent);
+                                @UserAgent UserAgentEnum userAgent) throws IOException {
         if (userAgent == UserAgentEnum.IOS) {
             return oauthDataService.createIosOAuthData();
         }
@@ -48,20 +50,11 @@ public class GithubUsersController {
 
     @GetMapping("/callback")
     public UserWithToken githubCallback(@RequestParam(value = "code") String code,
-                                        @RequestHeader(value = "User-Agent") String stringUserAgent) {
-        UserAgentEnum userAgent = extractUserAgent(stringUserAgent);
+                                        @UserAgent UserAgentEnum userAgent) {
         String clientId = oAuthSecret.clientId(userAgent);
         String clientSecret = oAuthSecret.clientSecret(userAgent);
         String githubAccessToken = githubApiRequester.accessToken(code, clientId, clientSecret);
         User user = githubApiRequester.profile(githubAccessToken);
         return userService.processLogin(user);
-    }
-
-    private UserAgentEnum extractUserAgent(String stringUserAgent) {
-        UserAgentEnum userAgent = UserAgentEnum.FE;
-        if (stringUserAgent.matches(RegexConstants.IOS_USER_AGENT_PATTERN)) {
-            userAgent = UserAgentEnum.IOS;
-        }
-        return userAgent;
     }
 }
