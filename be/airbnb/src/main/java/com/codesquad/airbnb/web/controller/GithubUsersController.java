@@ -37,8 +37,9 @@ public class GithubUsersController {
 
     @GetMapping("/login")
     public OAuthLoginData login(HttpServletResponse response,
-                                @RequestHeader(value = "User-Agent") String userAgent) throws IOException {
-        if (userAgent.matches(RegexConstants.IOS_USER_AGENT_PATTERN)) {
+                                @RequestHeader(value = "User-Agent") String stringUserAgent) throws IOException {
+        UserAgentEnum userAgent = extractUserAgent(stringUserAgent);
+        if (userAgent == UserAgentEnum.IOS) {
             return oauthDataService.createIosOAuthData();
         }
         response.sendRedirect(oauthDataService.githubFeLoginUrl());
@@ -47,26 +48,20 @@ public class GithubUsersController {
 
     @GetMapping("/callback")
     public UserWithToken githubCallback(@RequestParam(value = "code") String code,
-                                        @RequestHeader(value = "User-Agent") String userAgent) {
-        UserAgentEnum agent = UserAgentEnum.FE;
-        if (userAgent.matches(RegexConstants.IOS_USER_AGENT_PATTERN)) {
-            agent = UserAgentEnum.IOS;
-        }
-        String clientId = "";
-        String clientSecret = "";
-        switch (agent) {
-            case IOS:
-                clientId = oAuthSecret.getIosClientIdValue();
-                clientSecret = oAuthSecret.getIosClientSecretValue();
-                break;
-            case FE:
-                clientId = oAuthSecret.getFeClientIdValue();
-                clientSecret = oAuthSecret.getFeClientSecretValue();
-                break;
-        }
-
+                                        @RequestHeader(value = "User-Agent") String stringUserAgent) {
+        UserAgentEnum userAgent = extractUserAgent(stringUserAgent);
+        String clientId = oAuthSecret.clientId(userAgent);
+        String clientSecret = oAuthSecret.clientSecret(userAgent);
         String githubAccessToken = githubApiRequester.accessToken(code, clientId, clientSecret);
         User user = githubApiRequester.profile(githubAccessToken);
         return userService.processLogin(user);
+    }
+
+    private UserAgentEnum extractUserAgent(String stringUserAgent) {
+        UserAgentEnum userAgent = UserAgentEnum.FE;
+        if (stringUserAgent.matches(RegexConstants.IOS_USER_AGENT_PATTERN)) {
+            userAgent = UserAgentEnum.IOS;
+        }
+        return userAgent;
     }
 }
