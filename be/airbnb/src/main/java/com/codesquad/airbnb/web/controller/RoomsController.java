@@ -1,14 +1,12 @@
 package com.codesquad.airbnb.web.controller;
 
+import com.codesquad.airbnb.web.constants.RegexConstants;
 import com.codesquad.airbnb.web.dto.RoomDetail;
 import com.codesquad.airbnb.web.dto.RoomPreviews;
 import com.codesquad.airbnb.web.dto.UserInput;
 import com.codesquad.airbnb.web.service.rooms.RoomService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 

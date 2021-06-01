@@ -1,16 +1,15 @@
 package com.codesquad.airbnb.web.controller;
 
+import com.codesquad.airbnb.web.constants.RegexConstants;
 import com.codesquad.airbnb.web.domain.user.User;
+import com.codesquad.airbnb.web.dto.OAuthLoginData;
 import com.codesquad.airbnb.web.dto.UserWithToken;
-import com.codesquad.airbnb.web.service.oauth.ApiUrlGenerator;
+import com.codesquad.airbnb.web.service.oauth.OAuthDataService;
 import com.codesquad.airbnb.web.service.oauth.OauthApiRequester;
 import com.codesquad.airbnb.web.service.oauth.github.GithubApiRequester;
 import com.codesquad.airbnb.web.service.users.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,19 +19,24 @@ import java.io.IOException;
 @RestController
 public class GithubUsersController {
 
-    private final ApiUrlGenerator apiUrlGenerator;
+    private final OAuthDataService oauthDataService;
     private final OauthApiRequester githubApiRequester;
     private final UserService userService;
 
-    public GithubUsersController(ApiUrlGenerator apiUrlGenerator, GithubApiRequester githubApiRequester, UserService userService) {
-        this.apiUrlGenerator = apiUrlGenerator;
+    public GithubUsersController(OAuthDataService oauthDataService, GithubApiRequester githubApiRequester, UserService userService) {
+        this.oauthDataService = oauthDataService;
         this.githubApiRequester = githubApiRequester;
         this.userService = userService;
     }
 
     @GetMapping("/login")
-    public void login(HttpServletResponse response) throws IOException {
-        response.sendRedirect(apiUrlGenerator.githubLoginUrl());
+    public OAuthLoginData login(HttpServletResponse response,
+                                @RequestHeader(value = "User-Agent") String userAgent) throws IOException {
+        if (userAgent.matches(RegexConstants.IOS_USER_AGENT_PATTERN)) {
+            return oauthDataService.createLoginData();
+        } else {
+            response.sendRedirect(oauthDataService.githubLoginUrl());
+        }
     }
 
     @GetMapping("/callback")
