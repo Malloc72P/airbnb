@@ -79,7 +79,7 @@ create table `room_image`
     foreign key (room_id) references room (id)
 );
 
-create table `reservationPreview`
+create table `reservation`
 (
     id            int primary key auto_increment,
     guest_id      int not null,
