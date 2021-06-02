@@ -1,11 +1,13 @@
 package com.codesquad.airbnb.web.service.reservation;
 
-import com.codesquad.airbnb.web.domain.reservation.Reservation;
+import com.codesquad.airbnb.web.domain.reservation.ReservationDetail;
+import com.codesquad.airbnb.web.domain.reservation.ReservationPreview;
 import com.codesquad.airbnb.web.domain.reservation.ReservationRepository;
 import com.codesquad.airbnb.web.dto.UserInput;
 import com.codesquad.airbnb.web.exceptions.InvalidSqlResultException;
 import com.codesquad.airbnb.web.service.mapper.BooleanMapper;
-import com.codesquad.airbnb.web.service.mapper.ReservationMapper;
+import com.codesquad.airbnb.web.service.mapper.ReservationDetailMapper;
+import com.codesquad.airbnb.web.service.mapper.ReservationPreviewMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,6 +15,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -23,41 +26,53 @@ import static com.codesquad.airbnb.web.statement.ReservationStatementKt.*;
 public class ReservationDAO implements ReservationRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final ReservationMapper reservationMapper;
+    private final ReservationPreviewMapper reservationPreviewMapper;
+    private final ReservationDetailMapper reservationDetailMapper;
     private final BooleanMapper booleanMapper;
 
-    public ReservationDAO(NamedParameterJdbcTemplate jdbcTemplate, ReservationMapper reservationMapper, BooleanMapper booleanMapper) {
+    public ReservationDAO(NamedParameterJdbcTemplate jdbcTemplate,
+                          ReservationPreviewMapper reservationPreviewMapper,
+                          ReservationDetailMapper reservationDetailMapper,
+                          BooleanMapper booleanMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        this.reservationMapper = reservationMapper;
+        this.reservationPreviewMapper = reservationPreviewMapper;
+        this.reservationDetailMapper = reservationDetailMapper;
         this.booleanMapper = booleanMapper;
     }
 
     @Override
-    public Reservation save(Reservation reservation) {
+    public ReservationPreview save(ReservationPreview reservationPreview) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource parameter = new MapSqlParameterSource()
-                .addValue("room_id", reservation.getRoomId())
-                .addValue("guest_id", reservation.getGuestId())
-                .addValue("checkin_date", reservation.getCheckinDate())
-                .addValue("checkout_date", reservation.getCheckoutDate())
-                .addValue("adult_count", reservation.getAdultCount())
-                .addValue("child_count", reservation.getChildCount())
-                .addValue("infant_count", reservation.getInfantCount());
+                .addValue("room_id", reservationPreview.getRoomId())
+                .addValue("guest_id", reservationPreview.getGuestId())
+                .addValue("checkin_date", reservationPreview.getCheckinDate())
+                .addValue("checkout_date", reservationPreview.getCheckoutDate())
+                .addValue("adult_count", reservationPreview.getAdultCount())
+                .addValue("child_count", reservationPreview.getChildCount())
+                .addValue("infant_count", reservationPreview.getInfantCount());
         jdbcTemplate.update(SAVE_RESERVATION, parameter, keyHolder);
-        reservation.updateId(Objects.requireNonNull(keyHolder.getKey()).intValue());
-        return reservation;
+        reservationPreview.updateId(Objects.requireNonNull(keyHolder.getKey()).intValue());
+        return reservationPreview;
     }
 
     @Override
-    public Optional<Reservation> findReservationById(int reservationId) {
+    public Optional<ReservationPreview> findReservationById(int reservationId) {
         MapSqlParameterSource parameter = new MapSqlParameterSource()
                 .addValue("id", reservationId);
         try {
-            Reservation reservation = jdbcTemplate.queryForObject(FIND_RESERVATION, parameter, reservationMapper);
-            return Optional.ofNullable(reservation);
+            ReservationPreview reservationPreview = jdbcTemplate.queryForObject(FIND_RESERVATION, parameter, reservationPreviewMapper);
+            return Optional.ofNullable(reservationPreview);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<ReservationDetail> findReservationsByGuestId(int guestId) {
+        MapSqlParameterSource parameter = new MapSqlParameterSource()
+                .addValue("guest_id", guestId);
+        return jdbcTemplate.query(FIND_RESERVATION_BY_GUEST_ID, parameter, reservationDetailMapper);
     }
 
     @Override

@@ -26,7 +26,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/rooms/{roomId}/reservations");
+                .addPathPatterns("/rooms/{roomId}/reservations/**")
+                .addPathPatterns("/reservations/**");
     }
 
     @Override
@@ -34,6 +35,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
         resolvers.add(certifiedUserResolver);
         resolvers.add(userAgentResolver);
     }
-
-
 }

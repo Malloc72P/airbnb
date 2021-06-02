@@ -4,7 +4,7 @@ drop table if exists `host`;
 drop table if exists `guest`;
 drop table if exists location;
 drop table if exists room;
-drop table if exists reservation;
+drop table if exists reservationPreview;
 drop table if exists room_image;
 set foreign_key_checks = 1;
 
@@ -79,7 +79,7 @@ create table `room_image`
     foreign key (room_id) references room (id)
 );
 
-create table `reservation`
+create table `reservationPreview`
 (
     id            int primary key auto_increment,
     guest_id      int not null,

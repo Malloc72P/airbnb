@@ -2,12 +2,15 @@ package com.codesquad.airbnb.web.domain.reservation;
 
 import com.codesquad.airbnb.web.dto.UserInput;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepository {
-    Reservation save(Reservation reservation);
+    ReservationPreview save(ReservationPreview reservationPreview);
 
-    Optional<Reservation> findReservationById(int reservationId);
+    Optional<ReservationPreview> findReservationById(int reservationId);
+
+    List<ReservationDetail> findReservationsByGuestId(int guestId);
 
     boolean isReservationable(int roomId, UserInput userInput);
 

@@ -10,10 +10,12 @@ import java.time.LocalDate;
 @Getter
 @Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class ReservationPreview {
+public class ReservationDetailDTO {
     private int id;
     private int guestId;
-    private int roomId;
+    private int roomName;
+    private int pricePerDay;
+    private int totalPrice;
     private LocalDate checkinDate;
     private LocalDate checkoutDate;
     private int adultCount;

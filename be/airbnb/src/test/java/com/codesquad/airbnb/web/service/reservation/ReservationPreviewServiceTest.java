@@ -1,12 +1,12 @@
 package com.codesquad.airbnb.web.service.reservation;
 
-import com.codesquad.airbnb.web.domain.reservation.Reservation;
+import com.codesquad.airbnb.web.domain.reservation.ReservationPreview;
 import com.codesquad.airbnb.web.domain.room.BathroomType;
 import com.codesquad.airbnb.web.domain.room.BedroomType;
 import com.codesquad.airbnb.web.domain.room.PricePolicy;
 import com.codesquad.airbnb.web.domain.room.Room;
 import com.codesquad.airbnb.web.domain.user.Host;
-import com.codesquad.airbnb.web.dto.ReservationPreview;
+import com.codesquad.airbnb.web.dto.ReservationPreviewDTO;
 import com.codesquad.airbnb.web.dto.UserInput;
 import com.codesquad.airbnb.web.exceptions.notfound.ReservationNotFoundException;
 import com.codesquad.airbnb.web.service.rooms.RoomService;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
-class ReservationServiceTest {
+class ReservationPreviewServiceTest {
 
     private static final int TEST_GUEST_ID = 2;
 
@@ -39,17 +39,17 @@ class ReservationServiceTest {
     @DisplayName("숙소를 예약할 수 있어야 함")
     void testMakeReservation() {
         UserInput userInput = createUserInput();
-        Reservation reservation = makeReservation(userInput);
-        testReservation(userInput, reservation);
+        ReservationPreview reservationPreview = makeReservation(userInput);
+        testReservation(userInput, reservationPreview);
     }
 
-    private void testReservation(UserInput userInput, Reservation reservation) {
-        assertThat(reservation)
-                .extracting(Reservation::getCheckinDate,
-                        Reservation::getCheckoutDate,
-                        Reservation::getAdultCount,
-                        Reservation::getChildCount,
-                        Reservation::getInfantCount)
+    private void testReservation(UserInput userInput, ReservationPreview reservationPreview) {
+        assertThat(reservationPreview)
+                .extracting(ReservationPreview::getCheckinDate,
+                        ReservationPreview::getCheckoutDate,
+                        ReservationPreview::getAdultCount,
+                        ReservationPreview::getChildCount,
+                        ReservationPreview::getInfantCount)
                 .doesNotContainNull()
                 .containsExactly(userInput.getCheckIn(),
                         userInput.getCheckOut(),
@@ -62,23 +62,23 @@ class ReservationServiceTest {
     @DisplayName("숙소예약을 취소할 수 있어야 함")
     void testReservationCancelation() {
         UserInput userInput = createUserInput();
-        Reservation reservation = makeReservation(userInput);
-        reservationService.cancelReservation(reservation.getId(), TEST_GUEST_ID);
-        testReservationIsCanceled(reservation);
+        ReservationPreview reservationPreview = makeReservation(userInput);
+        reservationService.cancelReservation(reservationPreview.getId(), TEST_GUEST_ID);
+        testReservationIsCanceled(reservationPreview);
     }
 
-    private void testReservationIsCanceled(Reservation reservation) {
-        assertThatThrownBy(() -> reservationService.findReservation(reservation.getId()))
+    private void testReservationIsCanceled(ReservationPreview reservationPreview) {
+        assertThatThrownBy(() -> reservationService.findReservation(reservationPreview.getId()))
                 .isInstanceOf(ReservationNotFoundException.class)
                 .hasMessageContaining(ReservationNotFoundException.FIND_RESERVATION_BY_ID_FAILED);
     }
 
-    private Reservation makeReservation(UserInput userInput) {
+    private ReservationPreview makeReservation(UserInput userInput) {
         Room room = createRoom();
-        ReservationPreview reservationPreview = reservationService.makeReservation(room.getId(), TEST_GUEST_ID, userInput);
-        Reservation reservation = reservationService.findReservation(reservationPreview.getId());
-        assertThat(reservation).isNotNull();
-        return reservation;
+        ReservationPreviewDTO reservationPreviewDTO = reservationService.makeReservation(room.getId(), TEST_GUEST_ID, userInput);
+        ReservationPreview reservationPreview = reservationService.findReservation(reservationPreviewDTO.getId());
+        assertThat(reservationPreview).isNotNull();
+        return reservationPreview;
     }
 
     private UserInput createUserInput() {

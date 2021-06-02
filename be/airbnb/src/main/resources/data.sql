@@ -5525,7 +5525,7 @@ insert into room(id, location_id, name, rating, guest_capacity, point, descripti
 (264, 'https://a0.muscache.com/im/pictures/94132748-6783-495b-9de7-381b5c6abf5c.jpg?im_w=720', 28),
 (264, 'https://a0.muscache.com/im/pictures/80a0e4d4-bbf2-45ca-a984-581a6628d5bb.jpg?im_w=720', 29);
 
-insert into reservation(id, room_id, guest_id, checkin_date, checkout_date, adult_count, child_count,
+insert into reservationPreview(id, room_id, guest_id, checkin_date, checkout_date, adult_count, child_count,
                         infant_count)
 values (1, 1, 2, '2021-06-20', '2021-06-25', 2, 0, 0),
        (2, 1, 2, '2021-06-27', '2021-06-28', 2, 0, 0),

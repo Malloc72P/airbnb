@@ -10,7 +10,7 @@ import static com.codesquad.airbnb.web.exceptions.ReservationFailedException.CAN
 
 @Getter
 @Builder
-public class Reservation {
+public class ReservationPreview {
     private int id;
     private int guestId;
     private int roomId;
@@ -26,7 +26,7 @@ public class Reservation {
 
     public void checkGuestIsOwner(int guestId) {
         boolean isOwner = guestId == this.guestId;
-        if(!isOwner) {
+        if (!isOwner) {
             throw new ReservationFailedException(CANCELATION_FAILED_GUEST_IS_NOT_OWNER);
         }
     }
