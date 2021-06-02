@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class ReservationDetailDTO {
     private int id;
     private int guestId;
-    private int roomName;
+    private String roomName;
     private int pricePerDay;
     private int totalPrice;
     private LocalDate checkinDate;

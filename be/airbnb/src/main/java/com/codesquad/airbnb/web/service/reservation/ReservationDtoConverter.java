@@ -28,6 +28,7 @@ public class ReservationDtoConverter {
         PricePolicy pricePolicy = room.getPricePolicy();
         return ReservationDetailDTO.builder()
                 .id(reservation.getId())
+                .roomName(room.getName())
                 .pricePerDay(pricePolicy.getPricePerDay())
                 .totalPrice(pricePolicy.totalPrice(reservation.stayDay()))
                 .guestId(reservation.getGuestId())
